@@ -106,7 +106,9 @@ long_df <- function(df) {
 ### [1 PUNTO] Genere la data ```df_long``` utilizandola función ```long_df```. 
 La tabla resultante tendrá tres columnas: ```dataset, gen, expresion_level```.  
 ```{r df_long}
-# Genere la data df_long 
+df_long <- long_df(df)
+
+prueba <- df_long %>% group_by(gen)
 
 ```
 
