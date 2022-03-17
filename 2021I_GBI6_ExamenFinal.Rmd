@@ -364,4 +364,4 @@ ggsave("regresion11.pdf", width = 6, height = 8, dpi = 300)
 ```
 
 ## 3. CONTROL DE LA VERSIÓN [1 PUNTO]. Se verficará en ell repositorio de GitHub. 
-# :)
+# 
