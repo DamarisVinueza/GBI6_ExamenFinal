@@ -12,8 +12,8 @@ output:
     toc_float:
       collapsed: no
       smooth_scroll: yes
+      
 ---
-
 ![](./img/ikiam.png)
 
 **Bienvenidos al examen final de GBI6 - Bioinformática.**
@@ -122,7 +122,6 @@ setwd("C:/Users/DAMARIS/Documents/bioinformatica/GBI6_ExamenFinal/GBI6_ExamenFin
 library(sjPlot)
 library(sjmisc)
 
-
 cancer_mama <- prueba %>% group_by(gen) %>% mutate(row = row_number()) %>%
   tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
   select(-row)
@@ -175,7 +174,7 @@ cancertype <- list(
 
 cancertype_boxplots = lapply(cancertype, function(x) {ggplot(x, aes(dataset, expresion_level, col = dataset)) +
     geom_boxplot() + theme(legend.position='none') + labs(x = "", y = "Expression level")})
-    
+print(cancertype_boxplots)    
 
 ```
 
@@ -186,55 +185,13 @@ cancertype_boxplots[3]
 ggsave("boxplot3.png", width = 6, height = 8, dpi = 300)
  
 
-
 ```
 
 
 ### [1 PUNTO] 2.4 Escriba la función ```reg_gen_expression```, con el parámetro ```gen```. En este caso la función visualizará una gráfica de nube de puntos (geom_point) y una regresión por tipo de "dataset". La gráfica será de comparación de gen1 con gen2; por ejemplo en el eje "x" ```GATA3``` y en el eje "y"" ```FN1```.  
 
 ```{r reg_gen_exp}
-dataset_type <- list(
-    BRCA <- filter(df_long, dataset == "BRCA"),
-    OV <- filter(df_long, dataset == "OV"),
-    LUSC <- filter(df_long, dataset == "LUSC"),
-    KIPAN <- filter(df_long, dataset == "KIPAN"),
-    KIRP <- filter(df_long, dataset == "KIRP"),
-    UCEC <- filter(df_long, dataset == "UCEC"), 
-    GAPDH <- filter(df_long, dataset == "GAPDH")
-  )
-  
-plots_cancer <- list (  
-  BRCA_1 <- BRCA %>% group_by(gen) %>% mutate(row = row_number()) %>%
-    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
-    select(-row),
-  OV_1 <- OV %>% group_by(gen) %>% mutate(row = row_number()) %>%
-    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
-    select(-row),
-  LUSC_1 <- LUSC %>% group_by(gen) %>% mutate(row = row_number()) %>%
-    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
-    select(-row),
-  KIPAN_1 <- KIPAN %>% group_by(gen) %>% mutate(row = row_number()) %>%
-    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
-    select(-row),
-  KIRP_1 <- KIRP %>% group_by(gen) %>% mutate(row = row_number()) %>%
-    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
-    select(-row),
-  UCEC_1 <- UCEC %>% group_by(gen) %>% mutate(row = row_number()) %>%
-    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
-    select(-row),
-  GAPH_1 <- UCEC %>% group_by(gen) %>% mutate(row = row_number()) %>%
-    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
-    select(-row)
-)
-
-
-```
-
-
-### [0.5 PUNTOS] 2.5. Utilizando la función ```lapply()``` genera la lista ```reg_genplots``` con las gráficas para cada par de genes posibles. Recuerde que tiene 7 tipos de genes, se debe tener todas las combinaciones posibles por pares de genes (combinatoria sin repetición).
-```{r list_regplots}
-
-reg_genplots <- function (gen) {
+reg_gen_expression <- function (gen) {
   if (gen == "GATA3"){
     total <- list (
       lapply(plots_cancer, function(x) {ggplot(x, aes(GATA3, PTEN)) + 
@@ -339,9 +296,52 @@ reg_genplots <- function (gen) {
           geom_point() + geom_smooth(method='lm', formula= y~x)}), 
       lapply(plots_cancer, function(x) {ggplot(x, aes(GAPDH, FN1)) + 
           geom_point() + geom_smooth(method='lm', formula= y~x)}))
+
+
   }
 }
  
+
+
+```
+
+
+### [0.5 PUNTOS] 2.5. Utilizando la función ```lapply()``` genera la lista ```reg_genplots``` con las gráficas para cada par de genes posibles. Recuerde que tiene 7 tipos de genes, se debe tener todas las combinaciones posibles por pares de genes (combinatoria sin repetición).
+```{r list_regplots}
+dataset_type <- list(
+    BRCA <- filter(df_long, dataset == "BRCA"),
+    OV <- filter(df_long, dataset == "OV"),
+    LUSC <- filter(df_long, dataset == "LUSC"),
+    KIPAN <- filter(df_long, dataset == "KIPAN"),
+    KIRP <- filter(df_long, dataset == "KIRP"),
+    UCEC <- filter(df_long, dataset == "UCEC"), 
+    GAPDH <- filter(df_long, dataset == "GAPDH")
+  )
+  
+plots_cancer <- list (  
+  BRCA_1 <- BRCA %>% group_by(gen) %>% mutate(row = row_number()) %>%
+    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
+    select(-row),
+  OV_1 <- OV %>% group_by(gen) %>% mutate(row = row_number()) %>%
+    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
+    select(-row),
+  LUSC_1 <- LUSC %>% group_by(gen) %>% mutate(row = row_number()) %>%
+    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
+    select(-row),
+  KIPAN_1 <- KIPAN %>% group_by(gen) %>% mutate(row = row_number()) %>%
+    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
+    select(-row),
+  KIRP_1 <- KIRP %>% group_by(gen) %>% mutate(row = row_number()) %>%
+    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
+    select(-row),
+  UCEC_1 <- UCEC %>% group_by(gen) %>% mutate(row = row_number()) %>%
+    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
+    select(-row),
+  GAPH_1 <- UCEC %>% group_by(gen) %>% mutate(row = row_number()) %>%
+    tidyr::pivot_wider(names_from = gen, values_from = expresion_level) %>%
+    select(-row)
+)
+
 
 ```
 
@@ -365,3 +365,4 @@ ggsave("regresion11.pdf", width = 6, height = 8, dpi = 300)
 
 ## 3. CONTROL DE LA VERSIÓN [1 PUNTO]. Se verficará en ell repositorio de GitHub. 
 # :)
+#safe knit 
